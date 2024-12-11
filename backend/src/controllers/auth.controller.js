@@ -2,9 +2,9 @@ import { User } from "../models/user.model.js";
 import { ErrorFunction } from "../utils/errorFunc.js";
 
 export const AuthCallback = async (req, res, next) => {
-    const { id, firstName, lastName, imageUrl } = req.body;
-
     try{
+        const { id, firstName, lastName, imageUrl } = req.body;
+
         const user = await User.findOne({clerkId: id});
 
         if(!user){

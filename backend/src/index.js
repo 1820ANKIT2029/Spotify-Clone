@@ -21,6 +21,13 @@ const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(cors(
+    {
+        origin: "http://localhost:3000",
+        credentials: true,
+    }
+));
+
 app.use(express.json()); // to parse req.body
 app.use(clerkMiddleware()); // add auth object to req ==> req.auth
 app.use(fileUpload({
