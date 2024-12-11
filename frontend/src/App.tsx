@@ -1,20 +1,21 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
-import { Button } from "./components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import AuthCallbackPage from "./pages/auth-callback/AuthCallbackPage.tsx";
+import Homepage from "./pages/home/Homepage.tsx";
+import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 
 function App() {
   return (
-    <header>
-      <SignedOut>
-        <SignInButton> 
-          <Button>
-            Signup
-          </Button>
-        </SignInButton>
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-    </header>
+    <>
+      <Routes>
+        <Route path="/auth-callback" element={<AuthCallbackPage />} />
+        <Route 
+          path="/sso-callback" 
+          element={<AuthenticateWithRedirectCallback signInForceRedirectUrl={"/auth-callback"} />} 
+        />
+        
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+    </>
   );
 }
 
