@@ -5,6 +5,9 @@ import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload";
 import path from "path";
 
+import { createServer } from "http";
+import { initializeSocket } from "./utils/socket.js";
+
 import { connectToMongoDB } from "./utils/db.js";
 
 import AuthRouter from "./routes/auth.route.js";
@@ -20,6 +23,9 @@ const __dirname = path.resolve();
 
 const app = express();
 const PORT = process.env.PORT;
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
 
 app.use(cors(
     {
@@ -47,7 +53,7 @@ app.use("/api/admin", AdminRouter);
 app.use("/api/albums", AlbumRouter);
 app.use("/api/stats", StatsRouter);
 
-app.listen(PORT, ()=>{
+httpServer.listen(PORT, ()=>{
     console.log(`server is listening at port ${PORT}`)
     connectToMongoDB();
 })
