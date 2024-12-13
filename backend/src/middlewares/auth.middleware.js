@@ -1,4 +1,5 @@
 import { clerkClient } from "@clerk/express";
+import { ErrorFunction } from "../utils/errorFunc.js";
 
 export const requireLogin = async (req, res, next) => {
     if(!req.auth.userId){
@@ -19,6 +20,6 @@ export const requireAdmin = async (req, res, next) => {
 
 		next();
 	} catch (error) {
-		next(error);
+		ErrorFunction(req, res, "requireAdmin", error);
 	}
 };

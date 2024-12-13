@@ -40,11 +40,11 @@ app.use(fileUpload({
     })
 );
 
-app.use("/api/user", UserRouter);
+app.use("/api/users", UserRouter);
 app.use("/api/auth", AuthRouter);
-app.use("/api/song", SongRouter);
+app.use("/api/songs", SongRouter);
 app.use("/api/admin", AdminRouter);
-app.use("/api/album", AlbumRouter);
+app.use("/api/albums", AlbumRouter);
 app.use("/api/stats", StatsRouter);
 
 app.listen(PORT, ()=>{

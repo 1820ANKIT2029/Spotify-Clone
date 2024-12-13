@@ -7,7 +7,7 @@ import { ErrorFunction } from "../utils/errorFunc.js";
 const uploadToClodinary = async (file) => {
     try{
         const result = await cloudinary.uploader.upload(file.tempFilePath, {
-            resource_type: auto,
+            resource_type: "auto",
         })
 
         return result.secure_url;
@@ -17,18 +17,19 @@ const uploadToClodinary = async (file) => {
 };
 
 export const createSong = async (req, res, next) => {
-    if(!req.files || !req.files.audioFile || !req.files.imageFile){
-        return req.status(400).json({ message: "Please upload all files"});
-    }
-
-    const { title, artist, albumId, duration } = req.body;
-    const audioFile = req.files.audioFile;
-    const imageFile = req.files.imageFile;
-
-    const audioUrl = await uploadToClodinary(audioFile);
-    const imageUrl = await uploadToClodinary(imageFile);
-
+    
     try {
+        if(!req.files || !req.files.audioFile || !req.files.imageFile){
+            return req.status(400).json({ message: "Please upload all files"});
+        }
+
+        const { title, artist, albumId, duration } = req.body;
+        const audioFile = req.files.audioFile;
+        const imageFile = req.files.imageFile;
+
+        const audioUrl = await uploadToClodinary(audioFile);
+        const imageUrl = await uploadToClodinary(imageFile);
+
         const song = new Song({
             title,
             artist,
@@ -49,7 +50,8 @@ export const createSong = async (req, res, next) => {
         res.status(201).json(song);
 
     } catch (error) {
-        ErrorFunction(req, res, "Creatng Song", error);
+        console.log(error);
+        ErrorFunction(req, res, "Creating Song", error);
     }
 };
 
