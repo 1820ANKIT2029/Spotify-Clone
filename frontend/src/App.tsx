@@ -8,6 +8,7 @@ import AlbumPage from "./pages/album/AlbumPage.tsx";
 import AdminPage from "./pages/admin/AdminPage.tsx";
 
 import {Toaster} from 'react-hot-toast'
+import NotFoundPage from "./pages/404/NotFoundPage.tsx";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         </Route>
 
         <Route path="/admin" element={<AdminPage />} />
+
+        <Route path="/*" element={<NotFoundPage />} />
 
       </Routes>
 

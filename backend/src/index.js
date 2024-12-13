@@ -4,6 +4,8 @@ import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload";
 import path from "path";
+import cron from "node-cron";
+import fs from "fs";
 
 import { createServer } from "http";
 import { initializeSocket } from "./utils/socket.js";
@@ -46,12 +48,35 @@ app.use(fileUpload({
     })
 );
 
+// cron jobs
+const tempDir = path.join(process.cwd(), "tmp");
+cron.schedule("0 * * * *", () => {
+	if (fs.existsSync(tempDir)) {
+		fs.readdir(tempDir, (err, files) => {
+			if (err) {
+				console.log("error", err);
+				return;
+			}
+			for (const file of files) {
+				fs.unlink(path.join(tempDir, file), (err) => {});
+			}
+		});
+	}
+});
+
 app.use("/api/users", UserRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/songs", SongRouter);
 app.use("/api/admin", AdminRouter);
 app.use("/api/albums", AlbumRouter);
 app.use("/api/stats", StatsRouter);
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "../frontend/dist")));
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+	});
+}
 
 httpServer.listen(PORT, ()=>{
     console.log(`server is listening at port ${PORT}`)
